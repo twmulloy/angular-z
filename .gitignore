@@ -1,0 +1,6 @@
+# os
+.DS_Store
+
+# package managers
+bower_components/
+node_modules/
