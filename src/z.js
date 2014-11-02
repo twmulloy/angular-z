@@ -1,35 +1,68 @@
 'use strict';
 
 /**
- * register modules
- */
-angular.module('z.controllers', []);
-angular.module('z.directives', []);
-angular.module('z.filters', []);
-
-/**
  * controllers
  */
-angular.module('z.controllers').controller('zC', ['$scope',
-  function ($scope) {
+angular.module('z.controllers', [])
+  .controller('zStack', ['$scope',
+    function ($scope) {
+      console.log("z stack");
+    }
+  ])
+  .controller('zLayer', ['$scope',
+    function ($scope) {
+      console.log("z layer");
 
-  }
-]);
+
+    }
+  ])
+  .controller('zPane', ['$scope',
+    function ($scope) {
+      console.log("z pane");
+    }
+  ]);
 
 /**
  * directives
  */
-angular.module('z.directives').directive('z', [
+angular.module('z.directives', [])
+  .directive('zStack', [
 
-  function () {
-    return {
-      restrict: 'E',
-      controller: 'zC'
-    };
-  }
-]);
+    function () {
+      return {
+        restrict: 'E',
+        replace: true,
+        controller: 'zStack',
+        template: '<div/>',
+      };
+    }
+  ])
+  .directive('zLayer', [
+
+    function () {
+      return {
+        restrict: 'E',
+        replace: true,
+        controller: 'zLayer',
+        template: '<div/>',
+        link: function (scope, element, attributes) {
+          console.log(element);
+        }
+      };
+    }
+  ])
+  .directive('zPane', [
+
+    function () {
+      return {
+        restrict: 'E',
+        replace: true,
+        controller: 'zPane'
+      };
+    }
+  ]);
 
 /**
  * angular-z
  */
-angular.module('z', ['z.controllers', 'z.directives', 'z.filters']);
+angular.module('z', ['z.controllers', 'z.directives']);

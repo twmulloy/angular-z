@@ -1,15 +1,25 @@
 'use strict';
 
-/**
- * register modules
- */
-angular.module('zApp.controllers', []);
-angular.module('zApp.directives', []);
-angular.module('zApp.filters', []);
-angular.module('zApp.providers', []);
-angular.module('zApp.services', []);
+angular.module('zApp.controllers', [])
+  .controller('root', ['$scope',
+    function ($scope) {
+      console.log('root controller');
+    }
+  ]);
 
 /**
  * angular-z sample application
  */
-angular.module('zApp', ['z']);
+angular.module('zApp', [
+  'ngRoute',
+  'z',
+  'zApp.controllers',
+]).config(['$routeProvider',
+  function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'html/stacks/root.html',
+        controller: 'root'
+      });
+  }
+]);

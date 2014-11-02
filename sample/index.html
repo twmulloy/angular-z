@@ -4,8 +4,14 @@
 <title>Angular Z Sample App</title>
 <link rel='stylesheet' type='text/css' href='css/main.css' />
 
-<body>
-  <z></z>
-  <script src='/js/lib/angular.js'></script>
-  <script src='/js/lib/angular-z.js'></script>
-  <script src='/js/app/z-app.js'></script>
+<!-- angular and dependencies -->
+<script src='/js/lib/angular.js'></script>
+<script src='/js/lib/angular-route.js'></script>
+
+<!-- angular-z -->
+<script src='/js/lib/angular-z.js'></script>
+
+<!-- angular-z sample application -->
+<script src='/js/app/z-app.js'></script>
+
+<z-stack ng-view></z-stack>

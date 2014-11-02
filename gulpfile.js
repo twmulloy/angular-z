@@ -65,8 +65,10 @@ gulp.task('sample-update', function () {
   /**
    * move angular into sample lib directory
    */
-  gulp.src('./bower_components/angular/angular.js')
-    .pipe(gulp.dest(path.sample + '/js/lib'));
+  gulp.src([
+    './bower_components/angular/angular.js',
+    './bower_components/angular-route/angular-route.js'
+  ]).pipe(gulp.dest(path.sample + '/js/lib'));
 
   /**
    * move angular-z into sample lib directory
