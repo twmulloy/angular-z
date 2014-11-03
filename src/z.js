@@ -10,9 +10,13 @@ angular.module('z.controllers', [])
   .controller('zLayer', ['$scope',
     function ($scope) {}
   ])
-  .controller('zPane', ['$scope',
-    function ($scope) {}
+  .controller('zPane', ['$scope', '$element',
+    function ($scope, $element) {
+
+      this.$element = $element;
+    }
   ]);
+
 
 /**
  * directives
@@ -23,14 +27,9 @@ angular.module('z.directives', [])
     function () {
       return {
         restrict: 'A',
-        controller: 'zStack',
-        compile: function () {
-          return {
-            pre: function (scope, el, attrs) {
-              el.addClass('z-stack');
-            },
-            post: function (scope, el, attrs) {}
-          };
+        controller: angular.noop,
+        link: function (scope, el, attrs) {
+          el.addClass('z-stack');
         }
       };
     }
@@ -40,14 +39,10 @@ angular.module('z.directives', [])
     function () {
       return {
         restrict: 'A',
-        controller: 'zLayer',
-        compile: function () {
-          return {
-            pre: function (scope, el, attrs) {
-              el.addClass('z-layer');
-            },
-            post: function (scope, el, attrs) {}
-          };
+        require: '^zStack',
+        controller: angular.noop,
+        link: function (scope, el, attrs) {
+          el.addClass('z-layer');
         }
       };
     }
@@ -57,17 +52,37 @@ angular.module('z.directives', [])
     function () {
       return {
         restrict: 'A',
+        require: '^zLayer',
         controller: 'zPane',
-        compile: function () {
-          return {
-            pre: function (scope, el, attrs) {
-              el.addClass('z-pane');
-            },
-            post: function (scope, el, attrs) {}
-          };
+        link: function (scope, el, attrs) {
+          el.addClass('z-pane');
         }
       };
     }
+  ])
+  .directive('zPhase', [
+
+    /**
+     * z-phase is a simple state setter
+     */
+
+    function () {
+      return {
+        restrict: 'A',
+        require: '^zPane',
+        controller: angular.noop,
+        link: function (scope, el, attrs, ctrl) {
+
+          el.bind('click', function () {
+            console.log(el);
+            console.log(ctrl.$element);
+          });
+
+
+        }
+      }
+    }
+
   ]);
 
 /**

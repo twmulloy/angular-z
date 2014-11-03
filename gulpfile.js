@@ -60,6 +60,14 @@ gulp.task('sample-js', function () {
 });
 
 /**
+ * reload sample on css changes
+ */
+gulp.task('sample-css', function () {
+  return gulp.src(path.sample + '/**/*.css')
+    .pipe(connect.reload());
+});
+
+/**
  * update sample library
  */
 gulp.task('sample-update', function () {
@@ -99,6 +107,7 @@ gulp.task('sample-server', function () {
 gulp.task('sample-watch', function () {
   gulp.watch(path.sample + '/*.html', ['sample-html']);
   gulp.watch(path.sample + '/**/*.js', ['sample-js']);
+  gulp.watch(path.sample + '/**/*.css', ['sample-css']);
   gulp.watch(path.src + '/z.js', ['src-js']);
 });
 
