@@ -3,6 +3,7 @@ var karma = require('karma').server;
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var connect = require('gulp-connect');
+var historyApiFallback = require('connect-history-api-fallback');
 
 var path = {
   src: './src',
@@ -83,8 +84,12 @@ gulp.task('sample-update', function () {
 gulp.task('sample-server', function () {
   connect.server({
     root: path.sample,
+    host: 'localhost',
     port: 8080,
-    livereload: true
+    livereload: true,
+    middleware: function (connect, opt) {
+      return [historyApiFallback];
+    }
   });
 });
 

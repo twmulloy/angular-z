@@ -5,21 +5,13 @@
  */
 angular.module('z.controllers', [])
   .controller('zStack', ['$scope',
-    function ($scope) {
-      console.log("z stack");
-    }
+    function ($scope) {}
   ])
   .controller('zLayer', ['$scope',
-    function ($scope) {
-      console.log("z layer");
-
-
-    }
+    function ($scope) {}
   ])
   .controller('zPane', ['$scope',
-    function ($scope) {
-      console.log("z pane");
-    }
+    function ($scope) {}
   ]);
 
 /**
@@ -30,10 +22,16 @@ angular.module('z.directives', [])
 
     function () {
       return {
-        restrict: 'E',
-        replace: true,
+        restrict: 'A',
         controller: 'zStack',
-        template: '<div/>',
+        compile: function () {
+          return {
+            pre: function (scope, el, attrs) {
+              el.addClass('z-stack');
+            },
+            post: function (scope, el, attrs) {}
+          };
+        }
       };
     }
   ])
@@ -41,12 +39,15 @@ angular.module('z.directives', [])
 
     function () {
       return {
-        restrict: 'E',
-        replace: true,
+        restrict: 'A',
         controller: 'zLayer',
-        template: '<div/>',
-        link: function (scope, element, attributes) {
-          console.log(element);
+        compile: function () {
+          return {
+            pre: function (scope, el, attrs) {
+              el.addClass('z-layer');
+            },
+            post: function (scope, el, attrs) {}
+          };
         }
       };
     }
@@ -55,9 +56,16 @@ angular.module('z.directives', [])
 
     function () {
       return {
-        restrict: 'E',
-        replace: true,
-        controller: 'zPane'
+        restrict: 'A',
+        controller: 'zPane',
+        compile: function () {
+          return {
+            pre: function (scope, el, attrs) {
+              el.addClass('z-pane');
+            },
+            post: function (scope, el, attrs) {}
+          };
+        }
       };
     }
   ]);

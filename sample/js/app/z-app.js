@@ -5,6 +5,11 @@ angular.module('zApp.controllers', [])
     function ($scope) {
       console.log('root controller');
     }
+  ])
+  .controller('checkout', ['$scope',
+    function ($scope) {
+      console.log('checkout controller');
+    }
   ]);
 
 /**
@@ -14,12 +19,18 @@ angular.module('zApp', [
   'ngRoute',
   'z',
   'zApp.controllers',
-]).config(['$routeProvider',
-  function ($routeProvider) {
+]).config(['$routeProvider', '$locationProvider',
+  function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'html/stacks/root.html',
         controller: 'root'
+      })
+      .when('/checkout', {
+        templateUrl: 'html/stacks/checkout.html',
+        controller: 'checkout'
       });
+
+    $locationProvider.html5Mode(true);
   }
 ]);
