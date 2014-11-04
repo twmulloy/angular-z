@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var karma = require('karma').server;
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var minifyCSS = require('gulp-minify-css');
 var connect = require('gulp-connect');
 var historyApiFallback = require('connect-history-api-fallback');
 
@@ -9,7 +10,6 @@ var path = {
   src: './src',
   sample: './sample',
   release: './release',
-
 };
 
 /**
@@ -25,11 +25,18 @@ gulp.task('karma', function (done) {
  * build-release
  */
 gulp.task('build-release', function () {
-  return gulp.src(path.src + '/z.js')
+  gulp.src(path.src + '/z.js')
     .pipe(rename('angular-z.js'))
     .pipe(gulp.dest(path.release))
     .pipe(rename('angular-z.min.js'))
     .pipe(uglify())
+    .pipe(gulp.dest(path.release));
+
+  gulp.src(path.src + '/z.css')
+    .pipe(rename('angular-z.css'))
+    .pipe(gulp.dest(path.release))
+    .pipe(rename('angular.z.min.css'))
+    .pipe(minifyCSS())
     .pipe(gulp.dest(path.release));
 });
 
@@ -43,11 +50,18 @@ gulp.task('src-js', function () {
     .pipe(connect.reload());
 });
 
+gulp.task('src-css', function () {
+  return gulp.src(path.src + '/z.css')
+    .pipe(rename('angular-z.css'))
+    .pipe(gulp.dest(path.sample + '/css/lib'))
+    .pipe(connect.reload());
+});
+
 /**
  * reload sample on html changes
  */
 gulp.task('sample-html', function () {
-  return gulp.src(path.sample + '/*.html')
+  return gulp.src(path.sample + '/**/*.html')
     .pipe(connect.reload());
 });
 
@@ -84,6 +98,9 @@ gulp.task('sample-update', function () {
    */
   gulp.src(path.release + '/angular-z.js')
     .pipe(gulp.dest(path.sample + '/js/lib'));
+
+  gulp.src(path.release + '/angular-z.css')
+    .pipe(gulp.dest(path.sample + '/css/lib'));
 });
 
 /**
@@ -105,10 +122,18 @@ gulp.task('sample-server', function () {
  * watch for changes within sample app directory
  */
 gulp.task('sample-watch', function () {
-  gulp.watch(path.sample + '/*.html', ['sample-html']);
+  /**
+   * watch sample files
+   */
+  gulp.watch(path.sample + '/**/*.html', ['sample-html']);
   gulp.watch(path.sample + '/**/*.js', ['sample-js']);
   gulp.watch(path.sample + '/**/*.css', ['sample-css']);
+
+  /**
+   * watch src files
+   */
   gulp.watch(path.src + '/z.js', ['src-js']);
+  gulp.watch(path.src + '/z.css', ['src-css']);
 });
 
 /**

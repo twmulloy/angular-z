@@ -3,20 +3,7 @@
 /**
  * controllers
  */
-angular.module('z.controllers', [])
-  .controller('zStack', ['$scope',
-    function ($scope) {}
-  ])
-  .controller('zLayer', ['$scope',
-    function ($scope) {}
-  ])
-  .controller('zPane', ['$scope', '$element',
-    function ($scope, $element) {
-
-      this.$element = $element;
-    }
-  ]);
-
+angular.module('z.controllers', []);
 
 /**
  * directives
@@ -30,6 +17,7 @@ angular.module('z.directives', [])
         controller: angular.noop,
         link: function (scope, el, attrs) {
           el.addClass('z-stack');
+          scope.zStackEl = el;
         }
       };
     }
@@ -43,6 +31,7 @@ angular.module('z.directives', [])
         controller: angular.noop,
         link: function (scope, el, attrs) {
           el.addClass('z-layer');
+          scope.zLayerEl = el;
         }
       };
     }
@@ -53,9 +42,10 @@ angular.module('z.directives', [])
       return {
         restrict: 'A',
         require: '^zLayer',
-        controller: 'zPane',
+        controller: angular.noop,
         link: function (scope, el, attrs) {
           el.addClass('z-pane');
+          scope.zPaneEl = el;
         }
       };
     }
@@ -71,16 +61,14 @@ angular.module('z.directives', [])
         restrict: 'A',
         require: '^zPane',
         controller: angular.noop,
-        link: function (scope, el, attrs, ctrl) {
+        link: function (scope, el, attrs) {
 
           el.bind('click', function () {
-            console.log(el);
-            console.log(ctrl.$element);
+            console.log(scope.$parent.$parent.zStackEl.children());
           });
 
-
         }
-      }
+      };
     }
 
   ]);
