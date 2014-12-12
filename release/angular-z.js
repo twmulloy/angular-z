@@ -1,6 +1,27 @@
 'use strict';
 
 /**
+ * filters
+ */
+angular.module('z.filters', [])
+  .filter('zClassify', [
+
+    function () {
+      return function (input) {
+        return input.join('-');
+      };
+    }
+  ])
+  .filter('zName', [
+
+    function () {
+      return function (input) {
+        return input.replace(/(^\')?(\.\w+)?(\'$)?/g, '').split('/').reverse()[0];
+      };
+    }
+  ]);
+
+/**
  * controllers
  */
 angular.module('z.controllers', []);
@@ -36,36 +57,82 @@ angular.module('z.directives', [])
       };
     }
   ])
-  .directive('zPane', [
+  .directive('zPane', ['$filter',
 
-    function () {
+    function ($filter) {
       return {
         restrict: 'A',
         require: '^zLayer',
+        scope: {
+          template: '@ngInclude'
+        },
         controller: angular.noop,
         link: function (scope, el, attrs) {
-          el.addClass('z-pane');
+
+          var zPaneName = $filter('zName')(scope.template);
+          var zPaneNameAttr = $filter('zClassify')(['z', 'pane', 'name']);
+
+          el.addClass('z-pane').attr(zPaneNameAttr, zPaneName);
           scope.zPaneEl = el;
         }
       };
     }
   ])
-  .directive('zPhase', [
+  .directive('zPhase', ['$filter',
 
-    /**
-     * z-phase is a simple state setter
-     */
+    function ($filter) {
 
-    function () {
+      var currentPhaseAttr = 'z-current-phase';
+
+      function currentPhase(scope) {
+
+        var zLayer = scope.$parent;
+        var zStack = zLayer.$parent;
+
+        var zLayerEl = zLayer.zLayerEl;
+        var zStackEl = zStack.zStackEl;
+
+        return zLayerEl.attr(currentPhaseAttr);
+      }
+
+      /**
+       * z-phase is a simple state setter
+       */
+      function setPhase(scope) {
+
+        var fromPhase, toPhase;
+
+        fromPhase = angular.bind(this, currentPhase, scope)();
+        toPhase = scope.zPhase;
+
+        console.log(fromPhase);
+
+        if (!toPhase) {
+          return;
+        }
+
+
+
+
+
+
+
+
+      }
+
       return {
         restrict: 'A',
         require: '^zPane',
         controller: angular.noop,
+        scope: {
+          zPhase: '@'
+        },
         link: function (scope, el, attrs) {
 
-          el.bind('click', function () {
-            console.log(scope.$parent.$parent.zStackEl.children());
-          });
+          /**
+           * zPhase change request binding
+           */
+          el.bind('click', angular.bind(el, setPhase, scope, attrs));
 
         }
       };
@@ -76,4 +143,10 @@ angular.module('z.directives', [])
 /**
  * angular-z
  */
-angular.module('z', ['z.controllers', 'z.directives']);
+angular.module('z', [
+  'ngAnimate',
+
+  'z.controllers',
+  'z.directives',
+  'z.filters',
+]);

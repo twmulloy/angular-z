@@ -90,6 +90,7 @@ gulp.task('sample-update', function () {
    */
   gulp.src([
     './bower_components/angular/angular.js',
+    './bower_components/angular-animate/angular-animate.js',
     './bower_components/angular-route/angular-route.js'
   ]).pipe(gulp.dest(path.sample + '/js/lib'));
 

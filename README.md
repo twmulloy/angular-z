@@ -2,6 +2,7 @@
 
 # install
 $ npm i
+$ bower i
 
 # tests
 $ gulp karma

@@ -16,6 +16,7 @@ angular.module('zApp.controllers', [])
  * angular-z sample application
  */
 angular.module('zApp', [
+  'ngAnimate',
   'ngRoute',
   'z',
   'zApp.controllers',
